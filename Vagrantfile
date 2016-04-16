@@ -14,6 +14,10 @@ Vagrant.configure(2) do |config|
 
   config.vbguest.auto_update = true
 
+  config.vm.provision :shell, :inline => "sudo su -c 'echo LANG=en_US.utf-8 >> /etc/environment && echo LC_ALL=en_US.utf-8 >> /etc/environment'"
+  config.vm.provision :shell, :inline => "sudo rm /etc/localtime && sudo ln -s /usr/share/zoneinfo/UTC /etc/localtime"
+  config.vm.provision :shell, :inline => "sudo yum update -y --skip-broken"
+  
   # config.vm.box_check_update = false
   # config.vm.network "forwarded_port", guest: 80, host: 8080
   # config.vm.network "private_network", ip: "192.168.33.10"
