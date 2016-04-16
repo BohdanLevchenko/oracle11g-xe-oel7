@@ -51,6 +51,8 @@ node 'oracle.vm' {
       require => Exec['create swapfile'];
     "/tmp/xe.rsp":
       source => "puppet:///modules/oracle/xe.rsp";
+    "/etc/profile.d/oracle-env.sh":
+      source => "puppet:///modules/oracle/oracle-env.sh";
     "/home/vagrant/oracle-xe-11.2.0-1.0.x86_64.rpm.zip":
       source => "puppet:///modules/oracle/oracle-xe-11.2.0-1.0.x86_64.rpm.zip";
   }
