@@ -4,7 +4,7 @@
 Vagrant.configure(2) do |config|
   config.vm.box = "oracle11g-xe-oel7"
   config.vm.box_url = "http://cloud.terry.im/vagrant/oraclelinux-7-x86_64.box"
-  config.vm.hostname = "oracle"
+  config.vm.hostname = "oracle.vm"
 
   config.vm.provider "virtualbox" do |vb|
     vb.gui = false

@@ -1,3 +1,3 @@
-node oracle {
+node 'oracle.vm' {
   
 }
