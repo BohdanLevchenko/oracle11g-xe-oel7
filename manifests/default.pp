@@ -6,7 +6,7 @@ node 'oracle.vm' {
   }
 
   Exec { path  => ['/bin','/usr/bin', '/sbin','/usr/sbin','/usr/local/bin']}
-  
+
   exec {
     "create swapfile":
       command => "dd if=/dev/zero of=/swapfile bs=1M count=1024",
@@ -24,4 +24,11 @@ node 'oracle.vm' {
       unless => "grep '^/swapfile' /etc/fstab 2>/dev/null";
   }
 
+  file {
+    "/swapfile":
+      mode => 600,
+      owner => root,
+      group => root,
+      require => Exec['create swapfile'];
+  }
 }
