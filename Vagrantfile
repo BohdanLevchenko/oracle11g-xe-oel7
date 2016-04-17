@@ -10,6 +10,7 @@ Vagrant.configure(2) do |config|
     vb.gui = false
     vb.memory = "512"
     vb.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
+    vb.customize ["modifyvm", :id, "--cpus", "1"]
   end
 
   config.vbguest.auto_update = true
