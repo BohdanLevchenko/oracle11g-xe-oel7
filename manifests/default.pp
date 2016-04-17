@@ -29,7 +29,6 @@ node 'oracle.vm' {
       creates => "/home/vagrant/Disk1/oracle-xe-11.2.0-1.0.x86_64.rpm",
       timeout => 3600,
       unless => "test -f /etc/sysconfig/oracle-xe";
-
     "install xe":
       command => "rpm -ivh Disk1/oracle-xe-11.2.0-1.0.x86_64.rpm",
       cwd => "/home/vagrant",
