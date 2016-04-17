@@ -5,6 +5,7 @@ Vagrant.configure(2) do |config|
   config.vm.box = "oracle11g-xe-oel7"
   config.vm.box_url = "http://cloud.terry.im/vagrant/oraclelinux-7-x86_64.box"
   config.vm.hostname = "oracle.vm"
+  config.vm.network :forwarded_port, guest: 1521, host: 1521
 
   config.vm.provider "virtualbox" do |vb|
     vb.gui = false
@@ -27,6 +28,5 @@ Vagrant.configure(2) do |config|
     puppet.options = "--verbose --trace"
   end
   # config.vm.box_check_update = false
-  # config.vm.network "forwarded_port", guest: 80, host: 8080
   # config.vm.network "private_network", ip: "192.168.33.10"
 end
