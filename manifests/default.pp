@@ -23,24 +23,35 @@ node 'oracle.vm' {
       command => "echo >>/etc/fstab /swapfile swap swap defaults 0 0",
       unless => "grep '^/swapfile' /etc/fstab 2>/dev/null";
     "unzip xe":
-      command => "unzip -o oracle-xe-11.2.0-1.0.x86_64.rpm.zip",
-      require => [Package["unzip"], File["/home/vagrant/oracle-xe-11.2.0-1.0.x86_64.rpm.zip"]],
+      command => "unzip -o /vagrant/oracle-xe-11.2.0-1.0.x86_64.rpm.zip",
+      require => [Package["unzip"]],
       cwd => "/home/vagrant",
-      creates => "/home/vagrant/oracle-xe-11.2.0-1.0.x86_64.rpm",
+      creates => "/home/vagrant/Disk1/oracle-xe-11.2.0-1.0.x86_64.rpm",
       timeout => 3600,
       unless => "test -f /etc/sysconfig/oracle-xe";
+
     "install xe":
       command => "rpm -ivh Disk1/oracle-xe-11.2.0-1.0.x86_64.rpm",
       cwd => "/home/vagrant",
       require => [Exec["unzip xe"]],
       timeout => 3600,
-      unless => "test -f /etc/sysconfig/oracle-xe";
+      unless => "test -f /etc/init.d/oracle-xe";
     "configure xe":
       command => "/etc/init.d/oracle-xe configure responseFile=/tmp/xe.rsp >> /tmp/xe-install.log",
       timeout => 3600,
       require => [Exec["install xe"],
-                  Exec["enable swapfile"]],
+                  Exec["enable swapfile"],
+                  Exec["dos2unix xe.rsp"],
+                  Exec["dos2unix oracle-env.sh"]],
       unless => "test -f /etc/sysconfig/oracle-xe";
+    "dos2unix oracle-env.sh":
+      command => "dos2unix -n /vagrant/oracle-env.sh /etc/profile.d/oracle-env.sh && chmod a+r /etc/profile.d/oracle-env.sh",
+      creates => "/etc/profile.d/oracle-env.sh",
+      require => [Package["dos2unix"]];
+    "dos2unix xe.rsp":
+      command => "dos2unix -n /vagrant/xe.rsp /tmp/xe.rsp",
+      creates => "/tmp/xe.rsp",
+      require => [Package["dos2unix"]];
   }
 
   file {
@@ -49,11 +60,5 @@ node 'oracle.vm' {
       owner => root,
       group => root,
       require => Exec['create swapfile'];
-    "/tmp/xe.rsp":
-      source => "puppet:///modules/oracle/xe.rsp";
-    "/etc/profile.d/oracle-env.sh":
-      source => "puppet:///modules/oracle/oracle-env.sh";
-    "/home/vagrant/oracle-xe-11.2.0-1.0.x86_64.rpm.zip":
-      source => "puppet:///modules/oracle/oracle-xe-11.2.0-1.0.x86_64.rpm.zip";
   }
 }
